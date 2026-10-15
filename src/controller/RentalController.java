@@ -72,7 +72,9 @@ public class RentalController {
                 String nama = view.bacaTeks("Nama Penyewa");
                 int hari = (int) view.bacaAngka("Lama sewa (hari)");
                 if (hari < 1) {
-                        view.tampilPesan("Lama sewa minimal 1 hari.");
+                       if (hari < kendaraan.getMinimalHari()) {
+                        view.tampilPesan(kendaraan.getMerk() + " minimal disewa "
+                                + kendaraan.getMinimalHari() + " hari.");
                         return;
                 }
                 long total = kendaraan.hitungBiaya(hari);

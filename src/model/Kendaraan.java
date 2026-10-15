@@ -25,6 +25,13 @@ public abstract class Kendaraan {
         
         public abstract long hitungBiaya(int hari);
 
+//[LSP] Aturan minimal sewa dijadikan bagian dari kontrak kelas induk.
+        //      Default 1 hari; subclass boleh mengubah nilainya, dan pemanggil
+        //      (Controller) cukup bertanya ke sini tanpa perlu tahu jenis kendaraannya.
+        public int getMinimalHari() {
+                return 1;
+        }
+
         public String getPlatNomor() { return platNomor; }
         public String getMerk() { return merk; }
         public long getTarifPerHari() { return tarifPerHari; }
