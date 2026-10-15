@@ -1,11 +1,15 @@
 package controller;
 
+import java.util.List;
+
 import model.Kendaraan;
 import model.KendaraanRepository;
 import model.Penyewaan;
 import model.PenyewaanRepository;
 import view.RentalView;
 import view.StrukView;
+import java.util.List;
+import model.KendaraanFactory;
 
 //[SRP] Satu tanggung jawab: mengatur alur aplikasi
 //menerima pilihan dari View, memvalidasi, memanggil Model, mengirim hasil ke View.
@@ -44,19 +48,18 @@ public class RentalController {
                         view.tampilPesan("Plat nomor kosong atau sudah terdaftar.");
                         return;
                 }
-                String merk = view.bacaTeks("Merk");
-                String jenis = view.bacaTeks("Jenis (MOBIL/MOTOR)").toUpperCase();
-                if (!jenis.equals("MOBIL") && !jenis.equals("MOTOR")) {
-                        System.out.println("Jenis tidak dikenali");
-                        return;
+                String jenis = view.bacaTeks("Jenis (" + String.join("/", KendaraanFactory.JENIS) + ")").toUpperCase();
+                if (!List.of(KendaraanFactory.JENIS).contains(jenis)) {
+                view.tampilPesan("Jenis tidak dikenal.");
+                return;
                 }
                 long tarif = view.bacaAngka("Tarif per hari");
                 if (tarif <= 0) {
-                        System.out.println("Tarif harus lebih dari 0.");
+                        view.tampilPesan("Tarif harus lebih dari 0.");
                         return;
                 }
-                kendaraanRepo.tambah(new Kendaraan(plat, merk, jenis, tarif));
-                view.tampilPesan("Kendaraan berhasil ditambahkan");
+                kendaraanRepo.tambah(KendaraanFactory.buat(jenis, plat, merk, tarif));
+                view.tampilPesan("Kendaraan berhasil ditambahkan.");
         }
 
         public void sewaKendaraan() {
